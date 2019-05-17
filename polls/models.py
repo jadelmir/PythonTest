@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from datetime import datetime
 
 class Poll(models.Model):
     question = models.CharField(max_length=100)
@@ -26,3 +26,12 @@ class Vote(models.Model):
 
     class Meta:
         unique_together = ("poll", "voted_by")
+
+
+class Events(models.Model):
+    name = models.CharField(max_length =100)
+    created_by = models.ForeignKey(User , on_delete = models.CASCADE)
+    date_from = models.DateTimeField(default=datetime.now)
+    photo = models.ImageField(upload_to='cars' ,default='default.jpg')
+    created_at = models.DateTimeField(auto_now_add=True )
+    updated_at = models.DateTimeField(auto_now=True)

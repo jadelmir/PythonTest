@@ -16,11 +16,18 @@ Including another URLconf
 from django.contrib import admin
 # from django.urls import path
 from django.urls import include, re_path,path
+from django.conf import settings
+from django.conf.urls.static import static
+from rest_framework_swagger.views import get_swagger_view
 
+schema_view = get_swagger_view(title='Polls API')
 urlpatterns = [
-    re_path(r'^', include('polls.urls')),
+    re_path(r'^api/', include('polls.urls')),
     path('admin/', admin.site.urls),
-
+    path(r'swagger-docs/', schema_view),
 ]
+if settings.DEBUG:
+  urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
 # urlpatterns = [
 # ]

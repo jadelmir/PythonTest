@@ -11,7 +11,11 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
-
+from google.oauth2 import service_account
+import azure
+GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+    "pollsapi/GCP.json"
+)
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -39,7 +43,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'polls',
-    'rest_framework.authtoken'
+    'corsheaders',
+    'rest_framework.authtoken',
+    'rest_framework_swagger',
+    'storages',
 ]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -48,7 +55,8 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
-    )
+    ),
+    #  'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
 }
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -58,10 +66,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
-
+DATE_INPUT_FORMATS = ['%d-%m-%Y']
+USE_TZ = True
 ROOT_URLCONF = 'pollsapi.urls'
-
+CORS_ORIGIN_ALLOW_ALL = True 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -129,3 +140,22 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+#MEDIA PATH 
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+## AZURE KEYS 
+
+# STATICFILES_STORAGE = 'backend.custom_azure.AzureStaticStorage'
+# DEFAULT_FILE_STORAGE = 'backend.custom_azure.AzureMediaStorage'
+
+# STATIC_LOCATION = "static"
+# MEDIA_LOCATION = "media"
+
+# AZURE_ACCOUNT_NAME = "djangoaccountstorage"
+# AZURE_CUSTOM_DOMAIN = f'testevents2.blob.core.windows.net'
+# STATIC_URL = f'https://testevents2/{STATIC_LOCATION}/'
+# MEDIA_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{MEDIA_LOCATION}/'

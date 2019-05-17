@@ -1,8 +1,9 @@
 from rest_framework import serializers
-from .models import Poll, Choice, Vote
+from .models import Poll, Choice, Vote,Events
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
-
+from rest_framework.response import Response
+from rest_framework import status
 class VoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vote
@@ -40,3 +41,13 @@ class UserSerializer(serializers.ModelSerializer):
             user.save()
             Token.objects.create(user=user)
             return user
+            # headers = self.get_success_headers(serializer.data)
+            # return Response(
+            #  {"Success": "Data posted successfully"},
+            #  status=status.HTTP_201_CREATED)
+
+
+class EventsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Events 
+        fields = '__all__'
